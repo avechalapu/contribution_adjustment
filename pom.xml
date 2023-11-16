@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.lic.adjustment</groupId>
-	<artifactId>SAC-47</artifactId>
+	<artifactId>SAC-48</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>contribution_adjustment</name>

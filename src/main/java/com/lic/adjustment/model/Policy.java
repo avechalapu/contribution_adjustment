@@ -2,6 +2,8 @@
 package com.lic.adjustment.model;
 
 import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "policy")
@@ -11,19 +13,28 @@ public class Policy {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String frequency;
+    @Column(name = "policy_number")
+    private String policyNumber;
 
-    private String deposit;
+    @Column(name = "policyholder_name")
+    private String policyholderName;
 
-    // Additional fields based on your requirements
+    @Column(name = "start_date")
+    private Date startDate;
 
-    private String user;
+    @Column(name = "end_date")
+    private Date endDate;
 
-    private String status;
+    @Column(name = "policy_status")
+    private String policyStatus;
 
-    private String adjustmentType;
+    // Define relationships with other entities
 
-    private String approvalStatus;
+    @OneToMany(mappedBy = "policy", cascade = CascadeType.ALL)
+    private List<Premium> premiums;
+
+    @OneToMany(mappedBy = "policy", cascade = CascadeType.ALL)
+    private List<Beneficiary> beneficiaries;
 
     // Getters and Setters
 
@@ -35,51 +46,59 @@ public class Policy {
         this.id = id;
     }
 
-    public String getFrequency() {
-        return frequency;
+    public String getPolicyNumber() {
+        return policyNumber;
     }
 
-    public void setFrequency(String frequency) {
-        this.frequency = frequency;
+    public void setPolicyNumber(String policyNumber) {
+        this.policyNumber = policyNumber;
     }
 
-    public String getDeposit() {
-        return deposit;
+    public String getPolicyholderName() {
+        return policyholderName;
     }
 
-    public void setDeposit(String deposit) {
-        this.deposit = deposit;
+    public void setPolicyholderName(String policyholderName) {
+        this.policyholderName = policyholderName;
     }
 
-    public String getUser() {
-        return user;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
-    public String getStatus() {
-        return status;
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
-    public String getAdjustmentType() {
-        return adjustmentType;
+    public String getPolicyStatus() {
+        return policyStatus;
     }
 
-    public void setAdjustmentType(String adjustmentType) {
-        this.adjustmentType = adjustmentType;
+    public void setPolicyStatus(String policyStatus) {
+        this.policyStatus = policyStatus;
     }
 
-    public String getApprovalStatus() {
-        return approvalStatus;
+    public List<Premium> getPremiums() {
+        return premiums;
     }
 
-    public void setApprovalStatus(String approvalStatus) {
-        this.approvalStatus = approvalStatus;
+    public void setPremiums(List<Premium> premiums) {
+        this.premiums = premiums;
+    }
+
+    public List<Beneficiary> getBeneficiaries() {
+        return beneficiaries;
+    }
+
+    public void setBeneficiaries(List<Beneficiary> beneficiaries) {
+        this.beneficiaries = beneficiaries;
     }
 }

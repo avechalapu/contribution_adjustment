@@ -1,14 +1,18 @@
+
 package com.lic.adjustment.controller;
 
 import com.lic.adjustment.model.Policy;
 import com.lic.adjustment.service.PolicyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/policies")
 public class PolicyController {
 
     private final PolicyService policyService;
@@ -18,57 +22,32 @@ public class PolicyController {
         this.policyService = policyService;
     }
 
-    @GetMapping("/")
-    public List<Policy> getAllPolicies() {
-        return policyService.getAllPolicies();
+    @GetMapping("/policies/search")
+    public List<Policy> searchPolicies(@RequestParam(required = false) String policyNumber,
+                                       @RequestParam(required = false) String policyholderName,
+                                       @RequestParam(required = false) Date startDate,
+                                       @RequestParam(required = false) Date endDate,
+                                       @RequestParam(required = false) String policyStatus) {
+
+        if (policyNumber != null) {
+            return policyService.searchPoliciesByPolicyNumber(policyNumber);
+        } else if (policyholderName != null) {
+            return policyService.searchPoliciesByPolicyholderName(policyholderName);
+        } else if (startDate != null && endDate != null) {
+            return policyService.searchPoliciesByDateRange(startDate, endDate);
+        } else if (policyStatus != null) {
+            return policyService.searchPoliciesByPolicyStatus(policyStatus);
+        } else {
+            // No search parameters provided, return all policies
+            return policyService.getAllPolicies();
+        }
     }
 
-    @GetMapping("/{id}")
-    public Policy getPolicyById(@PathVariable long id) {
-        return policyService.getPolicyById(id);
+    @GetMapping("/policies/{policyId}")
+    public Policy fetchPolicyDetailsById(@PathVariable Long policyId) {
+        return policyService.fetchPolicyDetailsById(policyId);
     }
 
-    @GetMapping("/frequency/{frequency}")
-    public List<Policy> getPoliciesByFrequency(@PathVariable String frequency) {
-        return policyService.getPoliciesByFrequency(frequency);
-    }
+    // Add additional methods for policy adjustments here
 
-    @GetMapping("/deposit/{deposit}")
-    public List<Policy> getPoliciesByDeposit(@PathVariable String deposit) {
-        return policyService.getPoliciesByDeposit(deposit);
-    }
-
-    @PostMapping("/")
-    public Policy savePolicy(@RequestBody Policy policy) {
-        return policyService.savePolicy(policy);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deletePolicyById(@PathVariable long id) {
-        policyService.deletePolicyById(id);
-    }
-
-    // Additional methods mapping
-
-    @GetMapping("/user/{user}")
-    public List<Policy> getPoliciesByUser(@PathVariable String user) {
-        return policyService.getPoliciesByUser(user);
-    }
-
-    @GetMapping("/status/{status}")
-    public List<Policy> getPoliciesByStatus(@PathVariable String status) {
-        return policyService.getPoliciesByStatus(status);
-    }
-
-    @GetMapping("/adjustmentType/{adjustmentType}")
-    public List<Policy> getPoliciesByAdjustmentType(@PathVariable String adjustmentType) {
-        return policyService.getPoliciesByAdjustmentType(adjustmentType);
-    }
-
-    @GetMapping("/approvalStatus/{approvalStatus}")
-    public List<Policy> getPoliciesByApprovalStatus(@PathVariable String approvalStatus) {
-        return policyService.getPoliciesByApprovalStatus(approvalStatus);
-    }
 }
-
-Note: This is a basic implementation of the Spring Boot Controller class for the given Service class. You can add more methods or modify the existing ones based on your specific requirements. Make sure to update the package name accordingly in your project.

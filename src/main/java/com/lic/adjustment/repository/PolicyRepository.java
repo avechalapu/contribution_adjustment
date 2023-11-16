@@ -6,43 +6,26 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
 public interface PolicyRepository extends JpaRepository<Policy, Long> {
 
-    // Method to fetch all policies from the database
-    List<Policy> findAll();
+    // Search policies by policy number
+    List<Policy> findByPolicyNumber(String policyNumber);
 
-    // Method to fetch a policy by its ID
-    Policy findById(long id);
+    // Search policies by policyholder name
+    List<Policy> findByPolicyholderName(String policyholderName);
 
-    // Method to fetch policies based on their frequency
-    @Query("SELECT p FROM Policy p WHERE p.frequency = ?1")
-    List<Policy> findByFrequency(String frequency);
+    // Search policies by date range
+    List<Policy> findByStartDateBetween(Date startDate, Date endDate);
 
-    // Method to fetch policies with a specific deposit
-    @Query("SELECT p FROM Policy p WHERE p.deposit = ?1")
-    List<Policy> findByDeposit(String deposit);
+    // Search policies by policy status
+    List<Policy> findByPolicyStatus(String policyStatus);
 
-    // Method to save a policy adjustment
-    Policy save(Policy policy);
-
-    // Method to delete a policy by its ID
-    void deleteById(long id);
-
-    // Additional methods based on your requirements
-
-    // Method to fetch policies for a specific user
-    List<Policy> findByUser(String user);
-
-    // Method to fetch policies with a specific status
-    List<Policy> findByStatus(String status);
-
-    // Method to fetch policies with a specific adjustment type
-    List<Policy> findByAdjustmentType(String adjustmentType);
-
-    // Method to fetch policies with a specific approval status
-    List<Policy> findByApprovalStatus(String approvalStatus);
+    // Fetch comprehensive policy details by policy id
+    @Query("SELECT p FROM Policy p JOIN FETCH p.premiums pr JOIN FETCH p.beneficiaries b WHERE p.id = :policyId")
+    Policy fetchPolicyDetailsById(Long policyId);
 
 }

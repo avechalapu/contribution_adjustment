@@ -5,6 +5,7 @@ import com.lic.adjustment.repository.PolicyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -17,47 +18,31 @@ public class PolicyService {
         this.policyRepository = policyRepository;
     }
 
-    public List<Policy> getAllPolicies() {
-        return policyRepository.findAll();
+    // Search policies by policy number
+    public List<Policy> searchPoliciesByPolicyNumber(String policyNumber) {
+        return policyRepository.findByPolicyNumber(policyNumber);
     }
 
-    public Policy getPolicyById(long id) {
-        return policyRepository.findById(id);
+    // Search policies by policyholder name
+    public List<Policy> searchPoliciesByPolicyholderName(String policyholderName) {
+        return policyRepository.findByPolicyholderName(policyholderName);
     }
 
-    public List<Policy> getPoliciesByFrequency(String frequency) {
-        return policyRepository.findByFrequency(frequency);
+    // Search policies by date range
+    public List<Policy> searchPoliciesByDateRange(Date startDate, Date endDate) {
+        return policyRepository.findByStartDateBetween(startDate, endDate);
     }
 
-    public List<Policy> getPoliciesByDeposit(String deposit) {
-        return policyRepository.findByDeposit(deposit);
+    // Search policies by policy status
+    public List<Policy> searchPoliciesByPolicyStatus(String policyStatus) {
+        return policyRepository.findByPolicyStatus(policyStatus);
     }
 
-    public Policy savePolicy(Policy policy) {
-        return policyRepository.save(policy);
+    // Fetch comprehensive policy details by policy id
+    public Policy fetchPolicyDetailsById(Long policyId) {
+        return policyRepository.fetchPolicyDetailsById(policyId);
     }
 
-    public void deletePolicyById(long id) {
-        policyRepository.deleteById(id);
-    }
+    // Add additional business methods for policy adjustments here
 
-    // Additional methods based on your requirements
-
-    public List<Policy> getPoliciesByUser(String user) {
-        return policyRepository.findByUser(user);
-    }
-
-    public List<Policy> getPoliciesByStatus(String status) {
-        return policyRepository.findByStatus(status);
-    }
-
-    public List<Policy> getPoliciesByAdjustmentType(String adjustmentType) {
-        return policyRepository.findByAdjustmentType(adjustmentType);
-    }
-
-    public List<Policy> getPoliciesByApprovalStatus(String approvalStatus) {
-        return policyRepository.findByApprovalStatus(approvalStatus);
-    }
 }
-
-Note: This is a basic implementation of the Spring Boot Service class for the given repository. You can add more methods or modify the existing ones based on your specific requirements.
